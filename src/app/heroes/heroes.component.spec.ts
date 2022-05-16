@@ -25,4 +25,22 @@ describe('HeroesComponent Test', ()=>{
         expect(heroComponent.heroes.length).toBe(2);
     })
 
+    it('should call deleteHero with passed hero', ()=>{
+        heroComponent.heroes = HEROES;
+        mockHeroService.deleteHero.and.returnValue(of(true));
+        heroComponent.delete(HEROES[2]);
+
+        expect(mockHeroService.deleteHero).toHaveBeenCalledWith(HEROES[2]);
+    })
+
+    //Adding x before 'it' skips the test
+    xit('should call deleteHero with passed hero and calls subscribe', ()=>{
+        heroComponent.heroes = HEROES;
+        mockHeroService.deleteHero.and.returnValue(of(true));
+        heroComponent.delete(HEROES[2]);
+
+        ///expect(mockHeroService.deleteHero).toHaveBeenCalledWith(HEROES[2]);
+        expect(mockHeroService.deleteHero.subscribe).toHaveBeenCalled();
+    })
+
 })
