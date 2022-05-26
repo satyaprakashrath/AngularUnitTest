@@ -17,4 +17,10 @@ describe('Hero Component Shalow test', () =>{
         fixture.detectChanges();
         expect(fixture.componentInstance.hero.name).toBe('SuperDude');
     })
+
+    it('should have the correct hero in the anchor tag', ()=>{
+        fixture.componentInstance.hero = { id:1, name:'SuperDude', strength: 3}
+        fixture.detectChanges();
+        expect(fixture.nativeElement.querySelector('a').textContent).toContain('SuperDude');
+    })
 })
