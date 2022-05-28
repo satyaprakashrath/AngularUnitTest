@@ -1,6 +1,7 @@
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { Component, Input, NO_ERRORS_SCHEMA } from "@angular/core";
 import { ComponentFixture, TestBed } from "@angular/core/testing"
 import { of } from "rxjs";
+import { Hero } from "../hero";
 import { HeroService } from "../hero.service";
 import { HeroesComponent } from "./heroes.component"
 
@@ -12,11 +13,24 @@ describe('Heroes component (shallow tests)', () =>{
         {id:1,name:'WonderWoman', strength:55},
         {id:1,name:'SuperMan', strength:11}
     ];
+
+    @Component({
+        selector: 'app-hero',
+        template: '<div></div>'
+      })
+    class FakeHeroComponent {
+        @Input() hero: Hero;
+        //@Output() delete = new EventEmitter();
+      }
+      
     mockHeroesService = jasmine.createSpyObj(['getHeroes','add', 'delete']);
     beforeEach(()=>{
         TestBed.configureTestingModule({
-            declarations: [HeroesComponent],
-            schemas: [NO_ERRORS_SCHEMA],
+            declarations: [
+                HeroesComponent,
+                FakeHeroComponent
+            ],
+            //schemas: [NO_ERRORS_SCHEMA],
             providers: [
                 {provide: HeroService, useValue: mockHeroesService}
             ]
