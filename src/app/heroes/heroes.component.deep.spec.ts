@@ -16,7 +16,7 @@ describe("Heroes component (deep tests)", () => {
     { id: 1, name: "SuperMan", strength: 11 },
   ];
 
-  mockHeroesService = jasmine.createSpyObj(["getHeroes", "add", "delete"]);
+  mockHeroesService = jasmine.createSpyObj(["getHeroes", "addHero", "delete"]);
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [HeroesComponent, HeroComponent],
@@ -53,4 +53,21 @@ describe("Heroes component (deep tests)", () => {
         expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
 
     });
+
+    it('should add a new hero when add hero button is clicked', () =>{
+      mockHeroesService.getHeroes.and.returnValue(of(HEROES));
+      fixture.detectChanges();
+      let name = 'Mr Ice';
+      mockHeroesService.addHero.and.returnValue(of({id:5, name, strength:12}));
+      const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
+      const addButton = fixture.debugElement.queryAll(By.css('button'))[0];
+
+      inputElement.value = name;
+      addButton.triggerEventHandler('click',null);
+      fixture.detectChanges();
+
+      const text = fixture.debugElement.query(By.css('ul')).nativeElement.textContent;
+      expect(text).toContain(name);
+
+    })
 });
