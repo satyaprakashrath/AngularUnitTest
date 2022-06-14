@@ -83,4 +83,14 @@ describe("Heroes component (deep tests)", () => {
       expect(text).toContain(name);
 
     })
+
+    it('should call the correct route for the first hero', () =>{
+      mockHeroesService.getHeroes.and.returnValue(of(HEROES));
+      fixture.detectChanges();
+      let heroComponentDEs = fixture.debugElement.queryAll(By.directive(HeroComponent));
+      let routerLink = heroComponentDEs[0].query(By.directive(RouterLinkDirectiveStub)).injector.get(RouterLinkDirectiveStub);
+      heroComponentDEs[0].query(By.css('a')).triggerEventHandler('click',null);
+
+      expect(routerLink.navigatedTo).toBe('/detail/1');
+    })
 });

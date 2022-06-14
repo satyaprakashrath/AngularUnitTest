@@ -7,38 +7,54 @@ import { By } from "@angular/platform-browser";
 import { of } from "rxjs";
 import { FormsModule } from "@angular/forms";
 
-describe('HeroDetailComponent deep test', () =>{
-    let fixture: ComponentFixture<HeroDetailComponent>;
-    let mockHeroService, mockLocation,mockActivatedRoute;
+describe("HeroDetailComponent deep test", () => {
+  let fixture: ComponentFixture<HeroDetailComponent>;
+  let mockHeroService, mockLocation, mockActivatedRoute;
 
-    mockHeroService = jasmine.createSpyObj(['getHero','updateHero']);
-    mockLocation = jasmine.createSpyObj(['back']);
-    mockActivatedRoute = {
-        snapshot : {
-            paramMap : {
-                get : () =>{
-                    return '3';
-                }   
-            }
-        }
-    }
-    beforeEach( () =>{
-        TestBed.configureTestingModule({
-            imports: [FormsModule],
-            declarations: [HeroDetailComponent],
-            providers: [
-                {provide: HeroService , useValue: mockHeroService},
-                {provide: ActivatedRoute , useValue: mockActivatedRoute},
-                {provide: Location , useValue: mockLocation}
-            ]
-        })
-        fixture = TestBed.createComponent(HeroDetailComponent);
-        mockHeroService.getHero.and.returnValue(of({id:3, name: 'SuperDude', strength: 12}));
-    })
+  mockHeroService = jasmine.createSpyObj(["getHero", "updateHero"]);
+  mockLocation = jasmine.createSpyObj(["back"]);
+  mockActivatedRoute = {
+    snapshot: {
+      paramMap: {
+        get: () => {
+          return "3";
+        },
+      },
+    },
+  };
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [FormsModule],
+      declarations: [HeroDetailComponent],
+      providers: [
+        { provide: HeroService, useValue: mockHeroService },
+        { provide: ActivatedRoute, useValue: mockActivatedRoute },
+        { provide: Location, useValue: mockLocation },
+      ],
+    });
+    fixture = TestBed.createComponent(HeroDetailComponent);
+    mockHeroService.getHero.and.returnValue(
+      of({ id: 3, name: "SuperDude", strength: 12 })
+    );
+  });
 
-    it('Should render hero name in h2 tag', () =>{
-        fixture.detectChanges();
+  it("Should render hero name in h2 tag", () => {
+    fixture.detectChanges();
 
-        expect(fixture.nativeElement.querySelector('h2').textContent).toContain('SUPERDUDE');
-})
-})
+    expect(fixture.nativeElement.querySelector("h2").textContent).toContain(
+      "SUPERDUDE"
+    );
+  });
+
+  it('should call heroservice updateHero method on save', (done) =>{
+      mockHeroService.updateHero.and.returnValue(of({}));
+      fixture.detectChanges();
+
+      fixture.componentInstance.save();
+      setTimeout(() =>{
+        expect(mockHeroService.updateHero).toHaveBeenCalled();
+        done();
+      },300);
+      
+  })
+});
